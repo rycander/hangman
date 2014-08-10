@@ -12,7 +12,7 @@ class HumanPlayer
     locations = []
     while gets.downcase.include?('y')
       puts "List the location the letter appears in: (ex: 1 2 3)"
-      locations.concat gets.chomp.split.map {|string| string.to_i}
+      locations.concat gets.chomp.split.map {|string| string.to_i-1}
       puts "Are there any more locations that #{letter} appears in?"
     end
     locations
@@ -21,8 +21,9 @@ class HumanPlayer
   def guess_letter(word, guessed_letters)
     @word = word
     @guessed_letters = guessed_letters
-    puts "#{word} Gueeses:#{guessed_letters.sort}"
+
     puts "What letter do you want to guess?"
+    
     guess = ""
     begin
       guess = gets.chomp.downcase

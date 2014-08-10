@@ -6,6 +6,7 @@ class Game
     @guessing_player = guessing_player
     @checking_player = checking_player
     @word = ""
+    @missed_guesses = 0
     @guessed_letters = []
   end
 
@@ -25,17 +26,20 @@ class Game
 
   def turn_loop
     until won?
+
+      puts "#{@word}\nGuesses:#{@guessed_letters.sort}"
       @guessed_letters << @guessing_player.guess_letter(@word, @guessed_letters)
 
       insertion_points = @checking_player.check_letter(@guessed_letters.last)
+      @missed_guesses += 1 unless insertion_points
       insertion_points.each do |i|
-        @word[i-1] = @guessed_letters.last
+        @word[i] = @guessed_letters.last
       end
     end
   end
 
   def won?
-    return true if @guessed_letters.length > 10
+    return true if @missed_guesses > 5
     return true unless @word.include?(".")
     false
   end
@@ -51,8 +55,7 @@ end
 
 if $PROGRAM_NAME == __FILE__
   hp = HumanPlayer.new
-  hp2= HumanPlayer.new
   cp = ComputerPlayer.new('dictionary.txt')
-  g = Game.new(hp, hp2)
+  g = Game.new(cp, hp)
   g.run
 end
