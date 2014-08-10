@@ -25,33 +25,34 @@ class Game
 
   def turn_loop
     until won?
-      @guessed_letters << @guessing_player.guess_letter(@guessed_letters, @word)
+      @guessed_letters << @guessing_player.guess_letter(@word, @guessed_letters)
 
-      insertion_points = @checking_player.check_letter(guessed_letters.last)
+      insertion_points = @checking_player.check_letter(@guessed_letters.last)
       insertion_points.each do |i|
-        @word[i] = @guessed_letters.last
+        @word[i-1] = @guessed_letters.last
       end
     end
   end
 
   def won?
     return true if @guessed_letters.length > 10
-    return true unless @word.include?("_")
+    return true unless @word.include?(".")
     false
   end
 
   def display_winner
     if @word.include?("_")
-      puts "Guessing player wins!"
-    else
       puts "Checking player wins!"
+    else
+      puts "Guessing player wins!"
     end
   end
 end
 
 if $PROGRAM_NAME == __FILE__
   hp = HumanPlayer.new
+  hp2= HumanPlayer.new
   cp = ComputerPlayer.new('dictionary.txt')
-  g = Game.new(hp, cp)
+  g = Game.new(hp, hp2)
   g.run
 end

@@ -14,4 +14,5 @@ class ComputerPlayer
   def guess_letter(word, guessed_letters)
     'a'
   end
+
 end
