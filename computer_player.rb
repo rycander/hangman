@@ -29,9 +29,6 @@ class ComputerPlayer
 
   end
 
-  array = %w[a b c]
-  (('a'..'b').to_a - array).sample
-
   private
 
   def choose_most_frequent(array)
