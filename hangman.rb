@@ -2,12 +2,34 @@ require './human_player.rb'
 require './computer_player.rb'
 
 class Game
-  def initialize (guessing_player, checking_player)
-    @guessing_player = guessing_player
-    @checking_player = checking_player
+  def initialize (options)
+    @guessing_player = options[:guesser]
+    @checking_player = options[:checker]
     @word = ""
-    @missed_guesses = 0
+    @missed_guesses = 0 
     @guessed_letters = []
+  end
+
+  def self.choose_rolls
+    puts "Do you want to guess the word, or check it?"
+    while true
+      input = gets.chomp.downcase.to_sym
+
+      if input == :guess
+        return {
+          guesser: HumanPlayer.new,
+          checker: ComputerPlayer.new('dictionary.txt')
+        }
+      elsif input == :check
+        return {
+          checker: HumanPlayer.new,
+          guesser: ComputerPlayer.new('dictionary.txt')
+        }
+      else
+        puts "Please enter either guess or check."
+      end
+
+    end
   end
 
   def run
@@ -51,11 +73,11 @@ class Game
       puts "Guessing player wins!"
     end
   end
+
+
 end
 
 if $PROGRAM_NAME == __FILE__
-  hp = HumanPlayer.new
-  cp = ComputerPlayer.new('dictionary.txt')
-  g = Game.new(cp, hp)
+  g = Game.new(Game.choose_rolls)
   g.run
 end
